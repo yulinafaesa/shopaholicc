@@ -96,9 +96,15 @@ class Order extends Model
         return $index === false ? 0 : $index;
     }
 
-    public function formatDateTime(?Carbon $date = null): string
+    public function formatDateTime($date = null): string
     {
+        if (is_string($date)) {
+            $date = Carbon::parse($date);
+        }
         $date ??= $this->created_at;
+        if (is_string($date)) {
+            $date = Carbon::parse($date);
+        }
 
         return $date?->timezone('Asia/Jakarta')->format('d M Y H:i') ?? '-';
     }
@@ -133,7 +139,7 @@ class Order extends Model
                 'title' => $event->title,
                 'location' => $event->location,
                 'description' => $event->description,
-                'occurred_at' => $event->occurred_at->timezone('Asia/Jakarta')->format('d M Y H:i'),
+                'occurred_at' => ($event->occurred_at instanceof \Illuminate\Support\Carbon ? $event->occurred_at : \Illuminate\Support\Carbon::parse($event->occurred_at))->timezone('Asia/Jakarta')->format('d M Y H:i'),
             ])->values()->all(),
             'items' => $this->items->map(fn (OrderItem $item) => [
                 'name' => $item->product_name,

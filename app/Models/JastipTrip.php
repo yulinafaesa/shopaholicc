@@ -109,6 +109,11 @@ class JastipTrip extends Model
     /** @return array<string, mixed> */
     public function toFrontendArray(): array
     {
+        $depDate = is_string($this->departure_date) ? \Illuminate\Support\Carbon::parse($this->departure_date) : $this->departure_date;
+        $transitDate = is_string($this->transit_date) ? \Illuminate\Support\Carbon::parse($this->transit_date) : $this->transit_date;
+        $estReturnDate = is_string($this->estimated_return_date) ? \Illuminate\Support\Carbon::parse($this->estimated_return_date) : $this->estimated_return_date;
+        $orderDeadline = is_string($this->order_deadline) ? \Illuminate\Support\Carbon::parse($this->order_deadline) : $this->order_deadline;
+
         return [
             'id' => $this->id,
             'title' => $this->title,
@@ -118,15 +123,15 @@ class JastipTrip extends Model
             'destination_country' => $this->destination_country,
             'status' => $this->status,
             'status_label' => self::statusLabel($this->status),
-            'departure_date' => $this->departure_date->format('d M Y'),
+            'departure_date' => $depDate?->format('d M Y'),
             'transit_city' => $this->transit_city,
-            'transit_date' => $this->transit_date?->format('d M Y'),
-            'estimated_return_date' => $this->estimated_return_date->format('d M Y'),
-            'order_deadline' => $this->order_deadline->format('d M Y, H:i'),
-            'order_deadline_iso' => $this->order_deadline->toIso8601String(),
+            'transit_date' => $transitDate?->format('d M Y'),
+            'estimated_return_date' => $estReturnDate?->format('d M Y'),
+            'order_deadline' => $orderDeadline?->format('d M Y, H:i'),
+            'order_deadline_iso' => $orderDeadline?->toIso8601String(),
             'titip_estimation' => $this->titip_estimation,
             'route_points' => $this->routePoints(),
-            'updated_at' => $this->updated_at->diffForHumans(),
+            'updated_at' => $this->updated_at instanceof \Illuminate\Support\Carbon ? $this->updated_at->diffForHumans() : \Illuminate\Support\Carbon::parse($this->updated_at)->diffForHumans(),
         ];
     }
 }
