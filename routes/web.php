@@ -128,3 +128,35 @@ Route::middleware(['auth', 'role:penjual'])
 */
 
 Route::get('/api/products', [ProductController::class, 'index']);
+
+/*
+|--------------------------------------------------------------------------
+| DB UTILITIES (PRODUCTION MIGRATIONS)
+|--------------------------------------------------------------------------
+*/
+Route::get('/db-migrate', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+        return '<h3>Database Migration:</h3><pre>' . \Illuminate\Support\Facades\Artisan::output() . '</pre>';
+    } catch (\Throwable $e) {
+        return '<h3>Migration Failed:</h3><pre>' . $e->getMessage() . "\n" . $e->getTraceAsString() . '</pre>';
+    }
+});
+
+Route::get('/db-seed', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
+        return '<h3>Database Seeded:</h3><pre>' . \Illuminate\Support\Facades\Artisan::output() . '</pre>';
+    } catch (\Throwable $e) {
+        return '<h3>Seeding Failed:</h3><pre>' . $e->getMessage() . "\n" . $e->getTraceAsString() . '</pre>';
+    }
+});
+
+Route::get('/db-fresh-seed', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('migrate:fresh', ['--force' => true, '--seed' => true]);
+        return '<h3>Database Fresh & Seeded:</h3><pre>' . \Illuminate\Support\Facades\Artisan::output() . '</pre>';
+    } catch (\Throwable $e) {
+        return '<h3>Fresh Seed Failed:</h3><pre>' . $e->getMessage() . "\n" . $e->getTraceAsString() . '</pre>';
+    }
+});

@@ -38,24 +38,16 @@ class ProductSeeder extends Seeder
         ];
 
         foreach ($products as $product) {
-    Product::updateOrCreate(
-        ['slug' => Str::slug($product['name'])],
-        [
-            ...$product,
-            'slug' => Str::slug($product['name']),
-            'category' => $product['category'] ?? 'Uncategorized',
-            'shipping_from' => collect(['Jakarta', 'Bandung', 'Surabaya', 'Bali'])->random(),
-        ]
-    );
-}
+            Product::updateOrCreate(
                 ['slug' => Str::slug($product['name'])],
                 [
                     ...$product,
                     'slug' => Str::slug($product['name']),
-                    'shipping_from' => collect(['Jakarta', 'Bandung', 'Surabaya', 'Bali'])->random(),
+                    'category' => $product['category'] ?? 'Uncategorized',
+                    'shipping_from' => $product['shipping_from'] ?? collect(['Jakarta', 'Bandung', 'Surabaya', 'Bali'])->random(),
                     'stock' => rand(5, 50),
                     'is_active' => true,
-                ],
+                ]
             );
         }
     }
