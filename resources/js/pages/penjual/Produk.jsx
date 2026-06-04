@@ -1,11 +1,35 @@
 import { Head } from '@inertiajs/react'
 import PenjualLayout from '../../layouts/PenjualLayout'
 
-export default function Produk({ products = [] }) {
+export default function Produk({ products = [], error = null }) {
     return (
         <>
             <Head title="Produk" />
             <PenjualLayout pageTitle="Produk">
+                {error && (
+                    <div style={{
+                        padding: '14px 20px',
+                        background: 'rgba(239, 68, 68, 0.1)',
+                        border: '1px solid rgba(239, 68, 68, 0.25)',
+                        borderRadius: 8,
+                        color: '#B91C1C',
+                        fontSize: 13,
+                        marginBottom: 20,
+                        fontWeight: 500,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 4
+                    }}>
+                        <strong style={{ fontSize: 14 }}>Terjadi Kesalahan Sistem:</strong>
+                        <code style={{ fontSize: 12, background: 'rgba(0, 0, 0, 0.05)', padding: '6px 10px', borderRadius: 4, fontFamily: 'monospace' }}>
+                            {error}
+                        </code>
+                        <span style={{ fontSize: 11, color: '#7F1D1D', marginTop: 4 }}>
+                            Silakan periksa log server Laravel atau hubungi developer untuk info lebih lanjut.
+                        </span>
+                    </div>
+                )}
+
                 <div style={{
                     display: 'grid',
                     gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
