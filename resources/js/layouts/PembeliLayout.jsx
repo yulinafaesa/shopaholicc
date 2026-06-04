@@ -1,5 +1,6 @@
 import { Link, router, usePage } from '@inertiajs/react'
-import { LogOut } from 'lucide-react'
+import { LogOut, Menu, X } from 'lucide-react'
+import { useState } from 'react'
 import { themeCss } from '../theme/shopaholicTheme'
 
 const logoPath = '/img/Logo%20Shopaholic%203.png'
@@ -24,6 +25,7 @@ export default function PembeliLayout({
     const { cart, auth } = page.props
     const currentUrl = typeof page.url === 'string' ? page.url : ''
     const cartCount = cart?.count ?? 0
+    const [menuOpen, setMenuOpen] = useState(false)
 
     const isActive = (href) => {
         if (!href || !currentUrl) return false;
@@ -41,7 +43,55 @@ export default function PembeliLayout({
                 color: 'var(--ink)',
             }}
         >
-            <style>{themeCss}</style>
+            <style>{`
+                ${themeCss}
+                .pembeli-logout-btn {
+                    padding: 8px 14px;
+                    border: 1px solid rgba(255, 255, 255, 0.4);
+                    color: #ffffff;
+                    background: rgba(255, 255, 255, 0.08);
+                    border-radius: 20px;
+                    font-size: 12px;
+                    font-weight: 600;
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 6px;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                }
+                .pembeli-logout-btn:hover {
+                    background: rgba(255, 255, 255, 0.2);
+                    border-color: #ffffff;
+                    transform: translateY(-1px);
+                }
+                .pembeli-menu-toggle {
+                    display: none;
+                    background: transparent;
+                    border: none;
+                    color: #ffffff;
+                    cursor: pointer;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 8px;
+                    border-radius: 8px;
+                    transition: background 0.2s;
+                }
+                .pembeli-menu-toggle:hover {
+                    background: rgba(255, 255, 255, 0.1);
+                }
+                
+                @media (max-width: 1024px) {
+                    .pembeli-nav-center {
+                        display: none !important;
+                    }
+                    .pembeli-menu-toggle {
+                        display: flex;
+                    }
+                    .pembeli-nav-right {
+                        gap: 8px !important;
+                    }
+                }
+            `}</style>
 
             <nav
                 style={{
@@ -59,8 +109,8 @@ export default function PembeliLayout({
                     className="pembeli-container"
                     style={{
                         height: 74,
-                        display: 'grid',
-                        gridTemplateColumns: '1fr auto 1fr',
+                        display: 'flex',
+                        justifyContent: 'space-between',
                         alignItems: 'center',
                         gap: 16,
                     }}
@@ -69,7 +119,6 @@ export default function PembeliLayout({
                         href="/pembeli/belanja"
                         style={{
                             textDecoration: 'none',
-                            justifySelf: 'start',
                             display: 'inline-flex',
                             alignItems: 'center',
                         }}
@@ -78,10 +127,10 @@ export default function PembeliLayout({
                             src={logoPath}
                             alt="Shopaholic"
                             style={{
-                                height: 88,
+                                height: 52,
                                 width: 'auto',
                                 display: 'block',
-                                transform: 'translateY(-8px)',
+                                objectFit: 'contain',
                             }}
                         />
                     </Link>
@@ -90,9 +139,8 @@ export default function PembeliLayout({
                         className="pembeli-nav-center"
                         style={{
                             display: 'flex',
-                            gap: 24,
+                            gap: 'clamp(12px, 2vw, 24px)',
                             alignItems: 'center',
-                            justifySelf: 'center',
                         }}
                     >
                         {navItems.map((item) => (
@@ -145,44 +193,103 @@ export default function PembeliLayout({
                     </div>
 
                     <div
+                        className="pembeli-nav-right"
                         style={{
-                            justifySelf: 'end',
                             display: 'flex',
                             alignItems: 'center',
-                            gap: 10,
+                            gap: 12,
                         }}
                     >
-                        <span
-                            style={{
-                                fontSize: 12,
-                                color: '#ffffff',
-                                maxWidth: 120,
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                                whiteSpace: 'nowrap',
-                            }}
-                        >
-                            {auth?.user?.name}
-                        </span>
+                        {auth?.user?.name && (
+                            <span
+                                style={{
+                                    fontSize: 12,
+                                    color: '#ffffff',
+                                    maxWidth: 120,
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
+                                    opacity: 0.9,
+                                }}
+                            >
+                                {auth.user.name}
+                            </span>
+                        )}
 
                         <button
                             type="button"
                             onClick={handleLogout}
-                            className="pembeli-btn pembeli-btn-outline"
-                            style={{
-                                padding: '8px 12px',
-                                border: '1px solid #ffffff',
-                                color: '#ffffff',
-                                background: 'transparent',
-                                borderRadius: 20,
-                            }}
+                            className="pembeli-logout-btn"
                             aria-label="Keluar"
                         >
-                            <LogOut size={16} />
-                            Keluar
+                            <LogOut size={14} />
+                            <span>Keluar</span>
+                        </button>
+                        
+                        <button
+                            type="button"
+                            onClick={() => setMenuOpen(!menuOpen)}
+                            className="pembeli-menu-toggle"
+                            aria-label="Toggle Menu"
+                        >
+                            {menuOpen ? <X size={24} /> : <Menu size={24} />}
                         </button>
                     </div>
                 </div>
+
+                {/* Mobile Dropdown Menu */}
+                {menuOpen && (
+                    <div
+                        style={{
+                            background: 'linear-gradient(180deg, #6D0019, #4A0012)',
+                            borderTop: '1px solid #5c0015',
+                            padding: '12px 32px',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: 12,
+                        }}
+                    >
+                        {navItems.map((item) => (
+                            <Link
+                                key={item.href}
+                                href={item.href}
+                                onClick={() => setMenuOpen(false)}
+                                style={{
+                                    textDecoration: 'none',
+                                    fontSize: 14,
+                                    color: '#ffffff',
+                                    padding: '8px 0',
+                                    fontWeight: isActive(item.href) ? '700' : '500',
+                                    borderBottom: isActive(item.href) ? '1px solid #ffffff' : '1px solid transparent',
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                }}
+                            >
+                                <span>{item.label}</span>
+                                {item.href === '/pembeli/keranjang' && cartCount > 0 && (
+                                    <span
+                                        style={{
+                                            background: '#ffffff',
+                                            color: '#800020',
+                                            fontSize: 10,
+                                            fontWeight: 700,
+                                            minWidth: 18,
+                                            height: 18,
+                                            borderRadius: 9,
+                                            display: 'inline-flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            padding: '0 5px',
+                                        }}
+                                    >
+                                        {cartCount}
+                                    </span>
+                                )}
+                            </Link>
+                        ))}
+                    </div>
+                )}
             </nav>
 
             {(title || description) && (

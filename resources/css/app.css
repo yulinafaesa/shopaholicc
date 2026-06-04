@@ -15,7 +15,16 @@
     --success:#10B981;
 }
 
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
 /* GLOBAL */
+
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
 
 body{
     margin:0;

@@ -40,6 +40,15 @@ export const themeCss = `
     --font-body:"Plus Jakarta Sans",sans-serif;
 }
 
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
 body{
     background:
         linear-gradient(
@@ -54,6 +63,7 @@ body{
     width:min(1280px,100%);
     margin:0 auto;
     padding:0 32px;
+    box-sizing:border-box;
 }
 
 .pembeli-label{
@@ -156,7 +166,7 @@ body{
     color:var(--primary);
 }
 
-@media(max-width:768px){
+@media(max-width:1024px){
     .pembeli-nav-center{
         display:none;
     }

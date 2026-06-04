@@ -99,21 +99,101 @@ export default function HalamanBelanja({ products = [], categories = [] }) {
 
                     {/* SORT */}
                     <div style={{ position: 'relative' }}>
-                        <button onClick={() => setSortOpen(!sortOpen)}>
-                            Urutkan <ChevronDown size={14} />
+                        <button
+                            onClick={() => setSortOpen(!sortOpen)}
+                            className="pembeli-btn pembeli-btn-outline"
+                            style={{
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: 6,
+                                padding: '10px 16px',
+                                borderRadius: '14px',
+                                fontSize: '13px',
+                                fontWeight: '600',
+                                cursor: 'pointer',
+                                background: '#ffffff',
+                            }}
+                        >
+                            <span>Urutkan</span>
+                            <ChevronDown size={14} />
                         </button>
 
                         {sortOpen && (
                             <div style={{
                                 position: 'absolute',
-                                top: '100%',
+                                top: 'calc(100% + 6px)',
                                 right: 0,
-                                background: '#fff',
-                                border: '1px solid #ddd'
+                                background: '#ffffff',
+                                border: '1px solid var(--border)',
+                                borderRadius: '12px',
+                                boxShadow: '0 8px 24px rgba(0,0,0,0.08)',
+                                padding: '6px',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: 4,
+                                zIndex: 10,
+                                minWidth: '160px',
                             }}>
-                                <button onClick={() => setSortBy('name')}>Nama</button>
-                                <button onClick={() => setSortBy('price_asc')}>Harga Terendah</button>
-                                <button onClick={() => setSortBy('price_desc')}>Harga Tertinggi</button>
+                                <button
+                                    onClick={() => {
+                                        setSortBy('name')
+                                        setSortOpen(false)
+                                    }}
+                                    style={{
+                                        border: 'none',
+                                        background: sortBy === 'name' ? 'var(--bg)' : 'transparent',
+                                        color: sortBy === 'name' ? 'var(--primary)' : 'var(--ink)',
+                                        padding: '8px 12px',
+                                        borderRadius: '8px',
+                                        textAlign: 'left',
+                                        fontSize: '13px',
+                                        fontWeight: sortBy === 'name' ? '600' : '500',
+                                        cursor: 'pointer',
+                                        transition: 'background 0.2s',
+                                    }}
+                                >
+                                    Nama (A-Z)
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        setSortBy('price_asc')
+                                        setSortOpen(false)
+                                    }}
+                                    style={{
+                                        border: 'none',
+                                        background: sortBy === 'price_asc' ? 'var(--bg)' : 'transparent',
+                                        color: sortBy === 'price_asc' ? 'var(--primary)' : 'var(--ink)',
+                                        padding: '8px 12px',
+                                        borderRadius: '8px',
+                                        textAlign: 'left',
+                                        fontSize: '13px',
+                                        fontWeight: sortBy === 'price_asc' ? '600' : '500',
+                                        cursor: 'pointer',
+                                        transition: 'background 0.2s',
+                                    }}
+                                >
+                                    Harga Terendah
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        setSortBy('price_desc')
+                                        setSortOpen(false)
+                                    }}
+                                    style={{
+                                        border: 'none',
+                                        background: sortBy === 'price_desc' ? 'var(--bg)' : 'transparent',
+                                        color: sortBy === 'price_desc' ? 'var(--primary)' : 'var(--ink)',
+                                        padding: '8px 12px',
+                                        borderRadius: '8px',
+                                        textAlign: 'left',
+                                        fontSize: '13px',
+                                        fontWeight: sortBy === 'price_desc' ? '600' : '500',
+                                        cursor: 'pointer',
+                                        transition: 'background 0.2s',
+                                    }}
+                                >
+                                    Harga Tertinggi
+                                </button>
                             </div>
                         )}
                     </div>
@@ -121,12 +201,38 @@ export default function HalamanBelanja({ products = [], categories = [] }) {
                 </div>
 
                 {/* CATEGORY */}
-                <div style={{ marginBottom: 20 }}>
-                    <button onClick={() => setSelectedCategory('')}>Semua</button>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 24 }}>
+                    <button
+                        onClick={() => {
+                            setSelectedCategory('')
+                            setPage(1)
+                        }}
+                        className={`pembeli-btn ${selectedCategory === '' ? 'pembeli-btn-primary' : 'pembeli-btn-outline'}`}
+                        style={{
+                            padding: '8px 16px',
+                            borderRadius: '20px',
+                            fontSize: '13px',
+                            fontWeight: '600',
+                            cursor: 'pointer',
+                        }}
+                    >
+                        Semua
+                    </button>
                     {categories.map((cat) => (
                         <button
                             key={cat}
-                            onClick={() => setSelectedCategory(cat)}
+                            onClick={() => {
+                                setSelectedCategory(cat)
+                                setPage(1)
+                            }}
+                            className={`pembeli-btn ${selectedCategory === cat ? 'pembeli-btn-primary' : 'pembeli-btn-outline'}`}
+                            style={{
+                                padding: '8px 16px',
+                                borderRadius: '20px',
+                                fontSize: '13px',
+                                fontWeight: '600',
+                                cursor: 'pointer',
+                            }}
                         >
                             {cat}
                         </button>
