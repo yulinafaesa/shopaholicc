@@ -20,8 +20,8 @@ class Product extends Model
         return self::formatRupiah($this->price);
     }
 
-    public static function formatRupiah(int $amount): string
+    public static function formatRupiah($amount): string
     {
-        return 'Rp. '.number_format($amount, 0, ',', '.');
+        return 'Rp. '.number_format((int) $amount, 0, ',', '.');
     }
 }
